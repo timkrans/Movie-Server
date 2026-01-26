@@ -1,3 +1,4 @@
 .DS_Store
-backend/cmd/movies
+backend/movies
 go.sum
+movies.db
