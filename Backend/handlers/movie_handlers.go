@@ -18,7 +18,7 @@ func CreateMovie(c *gin.Context) {
 		return
 	}
 
-	path, err := utils.ValidateAndResolvePath(input.FilePath)
+	path, err := utils.ValidateAndResolvePath(input.VideoFilePath)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -26,7 +26,7 @@ func CreateMovie(c *gin.Context) {
 
 	movie := models.Movie{
 		Title:    input.Title,
-		FilePath: path,
+		VideoFilePath: path,
 	}
 
 	if err := database.DB.Create(&movie).Error; err != nil {
@@ -52,14 +52,14 @@ func UpdateMovie(c *gin.Context) {
 		return
 	}
 
-	path, err := utils.ValidateAndResolvePath(input.FilePath)
+	path, err := utils.ValidateAndResolvePath(input.VideoFilePath)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
 	movie.Title = input.Title
-	movie.FilePath = path
+	movie.VideoFilePath = path
 
 	database.DB.Save(&movie)
 	c.JSON(http.StatusOK, movie)
@@ -80,7 +80,7 @@ func StreamMovie(c *gin.Context) {
 		return
 	}
 
-	file, err := os.Open(movie.FilePath)
+	file, err := os.Open(movie.VideoFilePath)
 	if err != nil {
 		c.Status(http.StatusNotFound)
 		return
