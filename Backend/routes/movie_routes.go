@@ -1,6 +1,7 @@
 package routes
 
 import (
+	"net/http"
 	"github.com/gin-gonic/gin"
 	"movie-server-backend/handlers"
 )

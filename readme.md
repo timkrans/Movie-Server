@@ -23,6 +23,9 @@ DELETE /movies/:id
 ```
 - Will delete the meta data for the sql lite so movie is no longer able to be accessed by api
 
+## Testing
+- unit testing coming soon but can run a health check ```go test -v ./testing```
+
 ## Coming Soon
 - Save state of video so I want to add params to start the video at a certain time
 - Network connection so autoscalling the video output
