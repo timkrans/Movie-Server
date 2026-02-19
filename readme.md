@@ -1,27 +1,73 @@
 # Movie Server
-- This prorject currently is a backend only movie server
+- This project currently is a backend only movie server that handles files upload and will create paths to files for streaming.
 
-## Curent Endpoints
-```
-POST /movies 
-```
-- Allows for creation of movies in the sql lite db with meta data and location of the movie which must already exist on disk
-- Params for this and the put one are
-```title , video_file_path, cover_image_file_path```
-and the cover is not required
+## Technologies used 
+- SQLite for a database to hold information about the movies
+- Gin as the Go HTTP framework powering the API
+- GORM as the Go ORM framework for simplified database interactions and migrations
+- FFmpeg for video streaming
 
+## API Routes
+
+- All endpoints are served at `http://localhost:8080`
+
+### 1. **Create Movie**
+- **POST** `/movies`
+    - Form Data: title (string), video (file: mp4, mov, or zip), cover_image (optional file)
+    - Response: 201 Created with movie details
+
+### 2 **List Movies**
+- **GET** `/movies`
+    - Response: 200 OK with list of movies
+
+## 3 **Stream Movie**
+- **GET** `/movies/:id/stream`
+    - Response: 200 OK streaming the video file
+
+### 4 **Update Movie**
+- **PUT** `/movies/:id`
+    - Form Data: title (string), video (optional file), cover_image (optional file)
+    - Response: 200 OK with updated movie details
+
+### 5 **Delete Movie**
+- **DELETE** `/movies/:id`
+    - Response: 204 No Content
+
+## 6 **Stream Movie**
+- **GET** `/movies/:id/HLS`
+    - 302 Found  /movies/hls/<timestamp>/index.m3u8
+    - The client then streams the video using HLS.
+
+## FFmpeg Requirement
+
+This project uses FFmpeg to generate HLS playlists and video segments for streaming.
+FFmpeg **must be installed** on your system for the server to work.
+
+### Install FFmpeg
+
+**macOS (Homebrew)**  
+```bash
+brew install ffmpeg
 ```
-GET /movies/:id
-```
-- Return the byte file to actually play the video 
-```
-PUT /movies/:id   
-```
-- Allows you to change the sqllite meta data for movie file location, name, cover location.. etc
-```
-DELETE /movies/:id 
-```
-- Will delete the meta data for the sql lite so movie is no longer able to be accessed by api
+**Ubuntu / Debian**
+sudo apt update
+sudo apt install ffmpeg
+
+**Windows** 
+Download from: `https://ffmpeg.org`
+
+## Depency checks 
+- Check vulnerabilities by running 
+```govulncheck ./...```
+- If govulncheck not instaled
+  ```bash
+    go install golang.org/x/vuln/cmd/govulncheck@latest
+
+    echo 'export PATH=$HOME/go/bin:$PATH' >> ~/.zshrc
+    source ~/.zshrc
+
+    govulncheck -h
+    ```
 
 ## Testing
 - unit testing coming soon but can run a health check ```go test -v ./testing```
