@@ -2,3 +2,4 @@
 backend/movies
 go.sum
 movies.db
+.env

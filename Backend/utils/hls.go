@@ -14,12 +14,10 @@ func GenerateHLS(inputPath, outputDir string) (string, error) {
 
 	playlist := fmt.Sprintf("%s/index.m3u8", outputDir)
 	//must be homebrw could be set as env variable
-	ffmpegPath := "/opt/homebrew/bin/ffmpeg"
-	/* recommend change 
 	ffmpegPath := os.Getenv("FFMPEG_PATH")
 	if ffmpegPath == "" {
     	ffmpegPath = "ffmpeg" //fallback
-	}*/
+	}
 
 	cmd := exec.Command(ffmpegPath,
 		"-i", inputPath,
