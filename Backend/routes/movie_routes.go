@@ -19,8 +19,7 @@ func RegisterMovieRoutes(r *gin.Engine) {
 	r.DELETE("/movies/:id", handlers.DeleteMovie)
 	r.GET("/movies/:id/stream", handlers.StreamMovie)
 	r.GET("/movies", handlers.GetAllMovies)
-	r.GET("/movies/:id/hls", handlers.StreamHLS)
-	r.Static("/movies/hls", "./movies/hls")
+	r.GET("/movies/:id/hls/*filepath", handlers.StreamHLS)
 	//adding a health check for later testing
 	r.GET("/health", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{"status": "ok"})

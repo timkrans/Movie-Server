@@ -10,7 +10,7 @@ import (
 
     "github.com/gin-gonic/gin"
 
-     "movie-server-backend/db"
+    "movie-server-backend/db"
     "movie-server-backend/models"
     "movie-server-backend/utils"
 )
@@ -98,21 +98,41 @@ func CreateMovie(c *gin.Context) {
 
 func StreamHLS(c *gin.Context) {
     id := c.Param("id")
+    fp := strings.TrimPrefix(c.Param("filepath"), "/")
 
     var movie models.Movie
     if err := database.DB.First(&movie, id).Error; err != nil {
-        c.Status(http.StatusNotFound)
+        c.JSON(http.StatusNotFound, gin.H{"error": "movie not found"})
         return
     }
 
     if movie.HLSPath == "" {
-        c.JSON(http.StatusBadRequest, gin.H{"error": "HLS not available for this movie"})
+        c.JSON(http.StatusBadRequest, gin.H{"error": "HLS not available"})
         return
     }
 
-    publicPath := strings.TrimPrefix(movie.HLSPath, ".")
-    c.Redirect(http.StatusTemporaryRedirect, publicPath)
+    baseDir := filepath.Dir(movie.HLSPath)
+
+    if fp == "" || fp == "hls" {
+        fp = filepath.Base(movie.HLSPath)
+    }
+
+    fullPath := filepath.Join(baseDir, fp)
+
+    if _, err := os.Stat(fullPath); os.IsNotExist(err) {
+        c.JSON(http.StatusNotFound, gin.H{"error": "file not found"})
+        return
+    }
+
+    if strings.HasSuffix(fullPath, ".m3u8") {
+        c.Header("Content-Type", "application/vnd.apple.mpegurl")
+    } else if strings.HasSuffix(fullPath, ".ts") {
+        c.Header("Content-Type", "video/mp2t")
+    }
+
+    c.File(fullPath)
 }
+
 
 func StreamMovie(c *gin.Context) {
     id := c.Param("id")
