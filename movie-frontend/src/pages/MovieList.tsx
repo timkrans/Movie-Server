@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
-import "../MovieList.css"; // Import the CSS for styling
-
-// Define a type for the movie data
+import "../styles/MovieList.css"; 
+//define a type for the movie data
 interface Movie {
   id: number;
   title: string;
@@ -17,7 +16,7 @@ const MoviesList: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    // Fetch movies from the backend
+    //fetch movies from the backend
     axios
       .get<Movie[]>("http://localhost:8080/movies")
       .then((response) => {
@@ -49,7 +48,7 @@ const MoviesList: React.FC = () => {
             <Link to={`/movies/${movie.id}/hls`} className="movie-link">
               <img
                 className="movie-thumbnail"
-                src={`http://localhost:5000/${movie.cover_image_file_path}`}
+                src={`http://localhost:8080/${movie.cover_image_file_path}`}
                 alt={movie.title}
               />
               <div className="movie-title">{movie.title}</div>

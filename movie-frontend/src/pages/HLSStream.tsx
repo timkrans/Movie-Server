@@ -1,12 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
-import "../HLSStream.css"; // Import external CSS file
-
+import "../styles/HLSStream.css"; 
 const HLSStream: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const videoRef = useRef<HTMLVideoElement | null>(null); // Reference to the video element
+  const videoRef = useRef<HTMLVideoElement | null>(null); 
   const [isFullscreen, setIsFullscreen] = useState(false);
 
   useEffect(() => {
@@ -21,11 +20,11 @@ const HLSStream: React.FC = () => {
   const toggleFullscreen = async () => {
     if (videoRef.current) {
       if (document.fullscreenElement) {
-        // If video is already fullscreen, exit fullscreen
+        //working on getting tarui fullscreen videos
         document.exitFullscreen();
         setIsFullscreen(false);
       } else {
-        // Request fullscreen for the video element
+        
         await videoRef.current.requestFullscreen();
         setIsFullscreen(true);
       }

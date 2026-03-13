@@ -9,7 +9,6 @@ const App: React.FC = () => {
   const [darkMode, setDarkMode] = useState<boolean>(false);
 
   useEffect(() => {
-    // Check if the user prefers dark mode
     const prefersDarkMode = window.matchMedia("(prefers-color-scheme: dark)").matches;
     setDarkMode(prefersDarkMode);
   }, []);
@@ -19,7 +18,6 @@ const App: React.FC = () => {
   };
 
   useEffect(() => {
-    // Apply dark mode class to body
     if (darkMode) {
       document.body.classList.add("dark-mode");
     } else {

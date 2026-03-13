@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import "../AddMovie.css"; 
+import "../styles/AddMovie.css"; 
 
 const AddMovie: React.FC = () => {
   const [title, setTitle] = useState<string>("");
@@ -33,7 +33,7 @@ const AddMovie: React.FC = () => {
       });
       console.log("Movie added:", response.data);
       alert("Movie added successfully!");
-      // Reset form inputs after submission
+      //reset form inputs after submission
       setTitle("");
       setVideoFile(null);
       setCoverImage(null);
