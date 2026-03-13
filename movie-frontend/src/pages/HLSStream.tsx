@@ -1,43 +1,66 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
+import "../HLSStream.css"; // Import external CSS file
 
 const HLSStream: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const [loading, setLoading] = useState<boolean>(true);
-  const [error] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const videoRef = useRef<HTMLVideoElement | null>(null); // Reference to the video element
+  const [isFullscreen, setIsFullscreen] = useState(false);
 
   useEffect(() => {
-    if (id) {
-      setLoading(false); // No need to fetch data again since the `id` is already available
+    if (!id) {
+      setError("Movie ID is missing.");
+      setLoading(false);
+    } else {
+      setLoading(false);
     }
   }, [id]);
 
+  const toggleFullscreen = async () => {
+    if (videoRef.current) {
+      if (document.fullscreenElement) {
+        // If video is already fullscreen, exit fullscreen
+        document.exitFullscreen();
+        setIsFullscreen(false);
+      } else {
+        // Request fullscreen for the video element
+        await videoRef.current.requestFullscreen();
+        setIsFullscreen(true);
+      }
+    }
+  };
+
   if (loading) {
-    return <div>Loading HLS stream...</div>;
+    return <div className="loading-container">Loading...</div>;
   }
 
   if (error) {
-    return <div style={{ color: "red" }}>{error}</div>;
+    return <div className="error-container">{error}</div>;
   }
 
   return (
-    <div style={{ textAlign: "center", margin: "20px" }}>
-      <h1>HLS Stream for Movie {id}</h1>
-      <video
-        controls
-        style={{
-          width: "100%",
-          height: "auto", // Keeps the aspect ratio of the video
-          maxHeight: "100vh", // Prevents the video from becoming larger than the viewport
-        }}
-        poster={`http://localhost:8080/movies/${id}/cover`} // Optional: Display a cover image until the video starts playing
+    <div className="hls-container">
+      <div className="video-container">
+        <video
+          ref={videoRef}
+          className="video"
+          controls
+          poster={`http://localhost:8080/movies/${id}/cover`} // Optional cover image
         >
-        <source
-          src={`http://localhost:8080/movies/${id}/hls`} // Make sure the backend generates the correct stream URL
-          type="application/vnd.apple.mpegurl"
-        />
-        <p>Your browser does not support HLS streaming.</p>
-      </video>
+          <source
+            src={`http://localhost:8080/movies/${id}/hls`} // Ensure backend provides the correct HLS stream URL
+            type="application/vnd.apple.mpegurl"
+          />
+          <p>Your browser does not support HLS streaming.</p>
+        </video>
+        <div className="video-title">HLS Stream for Movie {id}</div>
+      </div>
+
+      <button onClick={toggleFullscreen} className="fullscreen-btn">
+        {isFullscreen ? "Exit Fullscreen" : "Go Fullscreen"}
+      </button>
     </div>
   );
 };

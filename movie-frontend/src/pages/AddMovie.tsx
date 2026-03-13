@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import "../AddMovie.css"; 
 
 const AddMovie: React.FC = () => {
   const [title, setTitle] = useState<string>("");
@@ -45,43 +46,49 @@ const AddMovie: React.FC = () => {
   };
 
   return (
-    <div>
-      <h1>Add a New Movie</h1>
-      <form onSubmit={handleSubmit}>
-        <label>
-          Title:
+    <div className="add-movie-container">
+      <h1 className="form-title">Add a New Movie</h1>
+      <form onSubmit={handleSubmit} className="movie-form">
+        <div className="form-group">
+          <label htmlFor="title" className="form-label">Title:</label>
           <input
+            id="title"
             type="text"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
+            className="form-input"
             required
           />
-        </label>
-        <br />
-        <label>
-          Video File:
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="videoFile" className="form-label">Video File:</label>
           <input
+            id="videoFile"
             type="file"
             onChange={(e) => setVideoFile(e.target.files ? e.target.files[0] : null)}
+            className="form-input"
             required
           />
-        </label>
-        <br />
-        <label>
-          Cover Image:
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="coverImage" className="form-label">Cover Image:</label>
           <input
+            id="coverImage"
             type="file"
             onChange={(e) => setCoverImage(e.target.files ? e.target.files[0] : null)}
+            className="form-input"
             required
           />
-        </label>
-        <br />
-        <button type="submit" disabled={loading}>
-          {loading ? "Adding Movie..." : "Add Movie"}
+        </div>
+
+        <button type="submit" className="submit-btn" disabled={loading}>
+          {loading ? <span className="loading-text">Adding Movie...</span> : "Add Movie"}
         </button>
       </form>
 
-      {error && <p style={{ color: "red" }}>{error}</p>}
+      {error && <p className="error-message">{error}</p>}
     </div>
   );
 };

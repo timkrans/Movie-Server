@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import "../MovieList.css"; // Import the CSS for styling
 
 // Define a type for the movie data
 interface Movie {
@@ -32,32 +33,30 @@ const MoviesList: React.FC = () => {
   }, []);
 
   if (loading) {
-    return <div>Loading movies...</div>;
+    return <div className="loading">Loading movies...</div>;
   }
 
   if (error) {
-    return <div style={{ color: "red" }}>{error}</div>;
+    return <div className="error">{error}</div>;
   }
 
   return (
-    <div>
+    <div className="movie-list">
       <h1>Movie List</h1>
-      <ul>
+      <div className="movies-grid">
         {movies.map((movie) => (
-          <li key={movie.id}>
-            <h2>{movie.title}</h2>
-            <img
-              src={`http://localhost:5000/${movie.cover_image_file_path}`}
-              alt={movie.title}
-              style={{ maxWidth: "200px", height: "auto" }}
-            />
-            <p>
-              <Link to={`/movies/${movie.id}/stream`}>Stream</Link> |{" "}
-              <Link to={`/movies/${movie.id}/hls`}>HLS Stream</Link>
-            </p>
-          </li>
+          <div key={movie.id} className="movie-card">
+            <Link to={`/movies/${movie.id}/hls`} className="movie-link">
+              <img
+                className="movie-thumbnail"
+                src={`http://localhost:5000/${movie.cover_image_file_path}`}
+                alt={movie.title}
+              />
+              <div className="movie-title">{movie.title}</div>
+            </Link>
+          </div>
         ))}
-      </ul>
+      </div>
     </div>
   );
 };

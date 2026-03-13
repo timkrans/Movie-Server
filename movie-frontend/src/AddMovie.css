@@ -1,0 +1,91 @@
+/* AddMovie.css */
+
+/* Overall container for the AddMovie page */
+.add-movie-container {
+  background-color: #f9f9f9;
+  padding: 40px 20px;
+  max-width: 600px;
+  margin: 0 auto;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Form title */
+.form-title {
+  text-align: center;
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+/* Styling the form elements */
+.movie-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Each form field container */
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Label styling */
+.form-label {
+  font-size: 1rem;
+  color: #333;
+  margin-bottom: 5px;
+}
+
+/* Input fields styling */
+.form-input {
+  padding: 12px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #fff;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+.form-input:focus {
+  border-color: #0073e6;
+}
+
+/* Button styling */
+.submit-btn {
+  padding: 14px;
+  font-size: 1.1rem;
+  background-color: #0073e6;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.submit-btn:hover {
+  background-color: #005bb5;
+  transform: scale(1.05);
+}
+
+.submit-btn:disabled {
+  background-color: #ddd;
+  cursor: not-allowed;
+}
+
+/* Loading text inside button */
+.loading-text {
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+/* Error message styling */
+.error-message {
+  text-align: center;
+  color: red;
+  font-size: 1rem;
+  margin-top: 20px;
+}
