@@ -72,20 +72,11 @@ func CreateMovie(c *gin.Context) {
         }
         finalCoverPath = uploadedCoverPath
     }
-
-    //fenerate HLS
-    hlsDir := fmt.Sprintf("./movies/hls/%d", time.Now().UnixNano())
-    hlsPath, err := utils.GenerateHLS(finalVideoPath, hlsDir)
-    if err != nil {
-        c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to generate HLS"})
-        return
-    }
-
     movie := models.Movie{
         Title:              input.Title,
         VideoFilePath:      finalVideoPath,
         CoverImageFilePath: finalCoverPath,
-        HLSPath:            hlsPath,
+        HLSPath:            "", //not ready yet
     }
 
     if err := database.DB.Create(&movie).Error; err != nil {
@@ -93,6 +84,24 @@ func CreateMovie(c *gin.Context) {
         return
     }
 
+    //background HLS generation
+    go func(movieID uint, videoPath string) {
+        hlsDir := fmt.Sprintf("./movies/hls/%d", time.Now().UnixNano())
+
+        fmt.Println("Starting HLS for movie:", movieID)
+
+        hlsPath, err := utils.GenerateHLS(videoPath, hlsDir)
+        if err != nil {
+            fmt.Println("HLS generation failed:", err)
+            return
+        }
+
+        database.DB.Model(&models.Movie{}).
+            Where("id = ?", movieID).
+            Update("hls_path", hlsPath)
+
+        fmt.Println("Finished HLS for movie:", movieID)
+    }(movie.ID, finalVideoPath)
     c.JSON(http.StatusCreated, movie)
 }
 
@@ -257,21 +266,25 @@ func UpdateMovie(c *gin.Context) {
         }
         if movie.HLSPath != "" {
             hlsDir := filepath.Dir(movie.HLSPath)
-            //ensure permissions allow deletion 
-            os.Chmod(hlsDir, 0777) 
+            os.Chmod(hlsDir, 0777)
             os.RemoveAll(hlsDir)
-        }
-
-        hlsDir := fmt.Sprintf("./movies/hls/%d", time.Now().UnixNano())
-        hlsPath, err := utils.GenerateHLS(finalVideoPath, hlsDir)
-        if err != nil {
-            c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to generate HLS"})
-            return
         }
 
         movie.VideoFilePath = finalVideoPath
         movie.CoverImageFilePath = finalCoverPath
-        movie.HLSPath = hlsPath
+        movie.HLSPath = ""
+        database.DB.Save(&movie)
+
+        go func(movieID uint, videoPath string) {
+            hlsDir := fmt.Sprintf("./movies/hls/%d", time.Now().UnixNano())
+            hlsPath, err := utils.GenerateHLS(videoPath, hlsDir)
+            if err != nil {
+                return
+            }
+            database.DB.Model(&models.Movie{}).
+                Where("id = ?", movieID).
+                Update("hls_path", hlsPath)
+        }(movie.ID, finalVideoPath)
     }
 
     if coverErr == nil {
