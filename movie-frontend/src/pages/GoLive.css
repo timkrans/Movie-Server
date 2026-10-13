@@ -1,0 +1,144 @@
+.golive {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 32px 24px 64px;
+}
+
+.golive__title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  margin-bottom: 8px;
+}
+
+.golive__lead {
+  color: var(--text-muted);
+  margin-bottom: 28px;
+  line-height: 1.5;
+}
+
+.golive__form {
+  display: grid;
+  gap: 10px;
+}
+
+.golive__form label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.golive__form input {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-radius: 8px;
+  padding: 12px 14px;
+  font: inherit;
+}
+
+.golive__form button,
+.golive__actions button,
+.golive__field button {
+  font: inherit;
+  font-weight: 600;
+  border: none;
+  border-radius: 18px;
+  padding: 10px 16px;
+  cursor: pointer;
+  background: var(--accent);
+  color: #fff;
+}
+
+.golive__panel {
+  display: grid;
+  gap: 16px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.golive__status {
+  color: var(--text-muted);
+  font-size: 14px;
+}
+
+.status-live {
+  color: var(--accent);
+  text-transform: uppercase;
+}
+
+.status-idle {
+  color: #f0c14b;
+  text-transform: uppercase;
+}
+
+.status-ended {
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.golive__field {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 8px;
+  align-items: center;
+}
+
+.golive__field span {
+  grid-column: 1 / -1;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.golive__field code {
+  background: var(--surface-2);
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  overflow-x: auto;
+  word-break: break-all;
+}
+
+.golive__field button {
+  background: var(--surface-2);
+  color: var(--text);
+  border-radius: 8px;
+  padding: 10px 12px;
+}
+
+.golive__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.golive__actions .danger {
+  background: #8b1e1e;
+}
+
+.golive__actions .ghost {
+  background: var(--surface-2);
+  color: var(--text);
+}
+
+.golive__actions a {
+  color: var(--text);
+  align-self: center;
+}
+
+.golive__msg {
+  margin-top: 16px;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+.golive__err {
+  margin-top: 16px;
+  color: #ff6b6b;
+}

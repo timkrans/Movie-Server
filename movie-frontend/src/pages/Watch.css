@@ -1,0 +1,41 @@
+.watch-page {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 0 48px;
+}
+
+.watch-page--center {
+  min-height: 50vh;
+  display: grid;
+  place-content: center;
+  gap: 16px;
+  text-align: center;
+  color: var(--text-muted);
+}
+
+.watch-page--center a {
+  color: var(--accent);
+}
+
+.watch-meta {
+  padding: 18px 16px 0;
+}
+
+.watch-back {
+  color: var(--text-muted);
+  font-size: 14px;
+  text-decoration: none;
+}
+
+.watch-back:hover {
+  color: var(--text);
+}
+
+.watch-title {
+  margin-top: 8px;
+  font-size: clamp(1.25rem, 2vw, 1.6rem);
+  font-weight: 650;
+  letter-spacing: -0.02em;
+  color: var(--text);
+}

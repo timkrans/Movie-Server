@@ -12,9 +12,9 @@
   "app": {
     "windows": [
       {
-        "title": "movie-frontend",
-        "width": 800,
-        "height": 600,
+        "title": "Movie Server",
+        "width": 1280,
+        "height": 800,
         "resizable": true,
         "fullscreen": false
       }

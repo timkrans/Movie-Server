@@ -8,13 +8,26 @@ import (
 )
 
 func LoadEnv(filePath string) error {
-	if filePath == "" {
-		filePath = ".env"
+	candidates := []string{}
+	if filePath != "" {
+		candidates = append(candidates, filePath)
+	} else {
+		candidates = append(candidates, ".env", "Backend/.env")
 	}
 
-	file, err := os.Open(filePath)
-	if err != nil {
-		return fmt.Errorf("could not open .env file: %v", err)
+	var lastErr error
+	var file *os.File
+	for _, path := range candidates {
+		f, err := os.Open(path)
+		if err != nil {
+			lastErr = err
+			continue
+		}
+		file = f
+		break
+	}
+	if file == nil {
+		return fmt.Errorf("could not open .env file: %v", lastErr)
 	}
 	defer file.Close()
 
@@ -34,9 +47,16 @@ func LoadEnv(filePath string) error {
 
 		key := strings.TrimSpace(parts[0])
 		value := strings.TrimSpace(parts[1])
+		if key == "" {
+			continue
+		}
 
-		err := os.Setenv(key, value)
-		if err != nil {
+		// Don't overwrite vars already set in the process environment
+		if _, exists := os.LookupEnv(key); exists {
+			continue
+		}
+
+		if err := os.Setenv(key, value); err != nil {
 			fmt.Printf("Error setting environment variable: %s=%s\n", key, value)
 		}
 	}
